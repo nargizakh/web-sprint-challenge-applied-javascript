@@ -1,33 +1,74 @@
-const Card = (article) => {
-  // TASK 5
-  // ---------------------
-  // Implement this function, which should return the markup you see below.
-  // It takes as its only argument an "article" object with `headline`, `authorPhoto` and `authorName` properties.
-  // The tags used, the hierarchy of elements and their attributes must match the provided markup exactly!
-  // The text inside elements will be set using their `textContent` property (NOT `innerText`).
-  // Add a listener for click events so that when a user clicks on a card, the headline of the article is logged to the console.
-  //
-  // <div class="card">
-  //   <div class="headline">{ headline }</div>
-  //   <div class="author">
-  //     <div class="img-container">
-  //       <img src={ authorPhoto }>
-  //     </div>
-  //     <span>By { authorName }</span>
-  //   </div>
-  // </div>
-  //
-}
+// STEP 3: Create article cards.
+// -----------------------
+// Send an HTTP GET request to the following address: https://lambda-times-api.herokuapp.com/articles
+// Study the response data you get back, closely.
+// You will be creating a card for each article in the response.
+// This won't be as easy as just iterating over an array though.
+//
+// Write a function that takes a single article object and returns the following markup:
+//
+// <div class="card">
+//   <div class="headline">{Headline of article}</div>
+//   <div class="author">
+//     <div class="img-container">
+//       <img src={url of authors image} />
+//     </div>
+//     <span>By {author's name}</span>
+//   </div>
+// </div>
+//
+// Add a listener for click events so that when a user clicks on a card, the headline of the article is logged to the console.
+//
+// Use your function to create a card for each of the articles, and append each card to the DOM.
 
-const cardAppender = (selector) => {
-  // TASK 6
-  // ---------------------
-  // Implement this function that takes a css selector as its only argument.
-  // It should obtain articles from this endpoint: `https://lambda-times-api.herokuapp.com/articles`
-  // However, the articles do not come organized in a single, neat array. Inspect the response closely!
-  // Create a card from each and every article object in the response, using the Card component.
-  // Append each card to the element in the DOM that matches the selector passed to the function.
-  //
-}
+const request = "https://lambda-times-api.herokuapp.com/articles";
+const getCards = axios.get(request);
 
-export { Card, cardAppender }
+getCards
+  .then((resp) => {
+    const cardContainer = document.querySelector(".cards-container");
+    const allArticles = resp.data.articles;
+
+    for (let articles in allArticles) {
+      allArticles[articles].forEach((element) => {
+        cardContainer.appendChild(cardList(element));
+      });
+    }
+    console.log("Also working!", resp);
+  })
+
+  .catch((err) => {
+    console.log("Error!", err);
+  });
+
+function cardList(articleData) {
+  const divCard = document.createElement("div");
+  divCard.classList.add("card");
+
+  const divHeadLine = document.createElement("div");
+  divHeadLine.classList.add("headline");
+  divHeadLine.textContent = articleData.headline;
+  divCard.appendChild(divHeadLine);
+
+  const divAuthor = document.createElement("div");
+  divAuthor.classList.add("author");
+  divCard.appendChild(divAuthor);
+
+  const divImage = document.createElement("div");
+  divImage.classList.add("img-container");
+  divAuthor.appendChild(divImage);
+
+  const images = document.createElement("img");
+  images.src = articleData.authorPhoto;
+  divImage.appendChild(images);
+
+  const span = document.createElement("span");
+  span.textContent = articleData.authorName;
+  divAuthor.appendChild(span);
+
+  divCard.addEventListener("click", (event) => {
+    console.log(articleData.headline);
+  });
+
+  return divCard;
+}

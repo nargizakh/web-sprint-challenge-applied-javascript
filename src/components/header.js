@@ -1,25 +1,34 @@
-const Header = (title, date, temp) => {
-  // TASK 1
-  // ---------------------
-  // Implement this function taking `title`, `date` and `temp` as its 3 args and returning the markup below.
-  // The tags used, the hierarchy of elements and their attributes must match the provided markup exactly!
-  // The text inside elements will be set using their `textContent` property (NOT `innerText`).
-  //
-  //  <div class="header">
-  //    <span class="date">{ date }</span>
-  //    <h1>{ title }</h1>
-  //    <span class="temp">{ temp }</span>
-  //  </div>
-  //
+// STEP 1: Create a Header component.
+// -----------------------
+// Write a function that takes no arguments and returns the markup you see below:
+//
+//  <div class="header">
+//    <span class="date">FEBRARY 20, 2021</span>
+//    <h1>Lambda Times</h1>
+//    <span class="temp">98°</span>
+//  </div>
+//
+// Use your function to create a header
+// and append it to the DOM inside the div.header-container
+
+function Header() {
+  const divHeader = document.createElement("div");
+  divHeader.classList.add("header");
+
+  const spanDate = document.createElement("span");
+  spanDate.classList.add("date");
+  spanDate.textContent = "MARCH 28, 2020";
+  divHeader.appendChild(spanDate);
+
+  const headerOne = document.createElement("h1");
+  headerOne.textContent = "Lambda Times";
+  divHeader.appendChild(headerOne);
+
+  const spanTemp = document.createElement("span");
+  spanTemp.textContent = "98°";
+  divHeader.appendChild(spanTemp);
+
+  return divHeader;
 }
 
-const headerAppender = (selector) => {
-  // TASK 2
-  // ---------------------
-  // Implement this function taking a css selector as its only argument.
-  // It should create a header using the Header component above, passing arguments of your choosing.
-  // It should append the header to the element in the DOM that matches the given selector.
-  //
-}
-
-export { Header, headerAppender }
+document.querySelector(".header-container").appendChild(Header());
